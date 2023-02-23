@@ -7,6 +7,7 @@ const getIP = require("./networkInterfaces.js");
 
 
 app.use(require("./routes/login.routes"));
+app.use(require("./routes/students/insertStudent.routes"));
 
 
 app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, error=>{
@@ -17,6 +18,16 @@ app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, error=>{
         return;
     }
     console.log(`El servidor a iniciado en la dirección ${getIP()}:${process.env.SERVER_PORT}`);
+
+    ////******** */
+  
+    console.log("*****Rutas*****")
+
+    console.log("/addStudent  (POST) -> agrega un Estudiante")
+    console.log("/addUser  (POST) -> agrega un usuario")
+    console.log("/login  (POST) -> agrega valida un login")
+    console.log("***************")
+
 
 });
 
