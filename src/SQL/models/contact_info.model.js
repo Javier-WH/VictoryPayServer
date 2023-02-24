@@ -9,8 +9,8 @@ Contact_info.init({
     phone1: DataTypes.STRING,
     phone2: DataTypes.STRING,
     email: DataTypes.STRING,
-    whatsapp1: DataTypes.STRING,
-    whatsapp2: DataTypes.STRING,
+    whatsaap1: DataTypes.STRING,
+    whatsaap2: DataTypes.STRING,
    
     updatedAt:{
         type: 'TEXT',

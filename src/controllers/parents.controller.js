@@ -1,33 +1,74 @@
-const express = require("express");
-const Router = express.Router();
-const registerStudent = require("../../joinners/registerStudent.joinner");
+const Parents = require("../SQL/models/parents.model");
+
+async function insertParents({ motherName, motherCi, motherNationality, motherWork, fatherName, fatherCi, fatherNationality, fatherWork }, transaction) {
+
+
+    let insert = await Parents.create({
+        mother_name: motherName,
+        mother_ci: motherCi,
+        mother_nation: motherNationality,
+        mother_work: motherWork,
+        father_name: fatherName,
+        father_ci: fatherCi,
+        father_nation: fatherNationality,
+        father_work: fatherWork
+    }, {
+        transaction
+    });
+    return insert.dataValues.id;
+
+
+}
+
+
+async function getParentsByCi({ motherCi, fatherCi }, transaction) {
+
+
+    let ask = await Parents.findAll({
+        where: {
+            mother_ci: motherCi,
+            father_ci: fatherCi,
+        },
+        transaction
+    });
+
+    if (ask.length > 0) {
+        return ask[0]
+    }
+
+    return null;
 
 
 
-Router.post("/addStudent", express.json(), registerStudent);
+}
+
+async function deleteParentsById(id, transaction) {
 
 
-module.exports = Router;
+    Parents.destroy({
+        where: {
+            id
+        },
+        transaction
+    });
 
-    //console.log(req.body);
-   
-    /*
-    if(req.body.force == undefined){
-        console.log(req.body)
-        res.status(200).json({
-            CONFLICT : "1",
-            name1 : `${req.body.studentName}  ${req.body.studentLastName}`,
-            ci1 : req.body.studentCi,
-            id1 : 5,
-            name2 : "Simon Bolivar",
-            ci2 :  req.body.studentCi,
-            id2 : 5,
-            problem:"Ambos tienen la misma cédula"
-        });
-    }else{
-        res.status(200).json(
-            {
-                date: '8 / 1 / 2021', 
+
+
+}
+
+module.exports = { insertParents, getParentsByCi, deleteParentsById }
+
+
+
+
+
+
+
+
+
+/**
+ * 
+ *   date: '8 / 1 / 2021', 
                 fatherName: 'Antonio Jose de Suicre',    
                 hipertension: 'false',
                 motherCi: '123',      
@@ -80,7 +121,4 @@ module.exports = Router;
                 diabetes: 'false',
                 age: '18 años',
                 account: '123'
-        });
-        console.log(req.body.force)
-    }
-  */
+ */

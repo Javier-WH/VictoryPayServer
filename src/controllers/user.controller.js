@@ -1,6 +1,5 @@
 const Users = require("../SQL/models/users.model");
 
-
 async function addUser(req, res){
     
     if(req.body.user == undefined || req.body.password == undefined || req.body.name == undefined || req.body.ci == undefined){

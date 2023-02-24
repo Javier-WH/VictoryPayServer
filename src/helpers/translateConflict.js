@@ -1,33 +1,33 @@
-const express = require("express");
-const Router = express.Router();
-const registerStudent = require("../../joinners/registerStudent.joinner");
+function getJsonResponse(userA, userB){
+
+  
+    let response = {
+        name1: `${userA.studentName} ${userA.studentLastName}`,
+        ci1: userA.studentCi,
+        code1: userA.code,
+        sec1: userA.seccion,
+        grade1: userA.grade,
+        gender1: userB.gender,
+
+        name2: `${userB.name} ${userB.lastName}`,
+        ci2: userB.ci,
+        code2: userB.code,
+        sec2: userB.seccion,
+        grade2: userB.grade,
+        gender2: userB.gender,
+    };
 
 
 
-Router.post("/addStudent", express.json(), registerStudent);
+    return response;
+}
 
 
-module.exports = Router;
 
-    //console.log(req.body);
-   
-    /*
-    if(req.body.force == undefined){
-        console.log(req.body)
-        res.status(200).json({
-            CONFLICT : "1",
-            name1 : `${req.body.studentName}  ${req.body.studentLastName}`,
-            ci1 : req.body.studentCi,
-            id1 : 5,
-            name2 : "Simon Bolivar",
-            ci2 :  req.body.studentCi,
-            id2 : 5,
-            problem:"Ambos tienen la misma cédula"
-        });
-    }else{
-        res.status(200).json(
-            {
-                date: '8 / 1 / 2021', 
+module.exports = {getJsonResponse};
+
+/**
+ *   date: '8 / 1 / 2021', 
                 fatherName: 'Antonio Jose de Suicre',    
                 hipertension: 'false',
                 motherCi: '123',      
@@ -80,7 +80,4 @@ module.exports = Router;
                 diabetes: 'false',
                 age: '18 años',
                 account: '123'
-        });
-        console.log(req.body.force)
-    }
-  */
+ */
