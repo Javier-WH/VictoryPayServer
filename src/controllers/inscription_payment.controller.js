@@ -28,7 +28,27 @@ async function getInscriptionPaimentByStudentId(student_id, transaction){
         return ask[0].dataValues
     }
     return null;
-
 }
 
-module.exports ={insertInscriptionPayment, getInscriptionPaimentByStudentId};
+
+async function updateInscriptionPayment({mount, payMethod, account, date}, student_id, transaction){
+
+    let update = await Inscription_payment.update({
+      
+        inscription: mount,
+        cash : payMethod == 1 ? "false" : "true",
+        operation_number: account,
+        date
+    },{
+        where:{
+            student_id,
+        },
+        transaction
+    });
+
+    return update;
+}
+
+
+
+module.exports ={insertInscriptionPayment, getInscriptionPaimentByStudentId, updateInscriptionPayment};

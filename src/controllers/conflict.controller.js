@@ -3,18 +3,19 @@ const sequelize = require("../SQL/Sequelize/connection");
 
 
 
-async function getConflictItem(id){
+async function getConflictItem(id, transaction){
 
     try {
         
         let ask = await Conflicts.findAll({
             where:{
                 id
-            }
+            },
+            transaction
         });
 
         if(ask.length > 0){
-            return ask[0];
+            return ask[0].dataValues;
         }
 
         return null;

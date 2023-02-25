@@ -33,5 +33,24 @@ async function getContactInfoByStudentId(student_id, transaction){
 
 }
 
+async function updateContactInfo({phone1, phone2, email, whatsaap1, whatsaap2}, student_id, transaction){
 
-module.exports ={ insertContactInfo, getContactInfoByStudentId};
+    let update = await Contact_info.update({
+        phone1,
+        phone2,
+        email,
+        whatsaap1,
+        whatsaap2
+    },{
+        where:{
+            student_id
+        },
+        transaction
+    });
+
+    return update;
+
+}
+
+
+module.exports ={ insertContactInfo, getContactInfoByStudentId, updateContactInfo};

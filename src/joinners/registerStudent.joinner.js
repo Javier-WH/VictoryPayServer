@@ -1,28 +1,31 @@
 
 const sequelize = require("../SQL/Sequelize/connection");
-const { getStudentByCi, getStudentByCode, insertStudent, updateStudentByCi, updateStudentByCode, updateStudentById } = require("../controllers/student.controller");
-const { insertParents, getParentsByCi, deleteParentsById } = require("../controllers/parents.controller");
+const { getStudentByCi, insertStudent} = require("../controllers/student.controller");
+const { insertParents, getParentsByCi } = require("../controllers/parents.controller");
 const { getTutorByCi, insertTutor } = require("../controllers/tutors.controller");
-const { getAddressByStudentId, insertAddress } = require("../controllers/address.controller");
+const { insertAddress } = require("../controllers/address.controller");
 const { insertMedicalInfo } = require("../controllers/medicalInfo.controller");
 const { insertContactInfo } = require("../controllers/contact_info.controller");
 const { insertInscriptionPayment } = require("../controllers/inscription_payment.controller");
 const { saveInscriptionConflict } = require("../controllers/conflict.controller");
 const { getJsonResponse } = require("../helpers/translateConflict");
-
+const forceInsert = require("./forceRegisterStudent.joinner");
 
 async function registerStudent(req, res) {
     let data = req.body;
     let registerTransaction = await sequelize.transaction();
 
     try {
+        //esto revisa que no se esté obligando a una acutalización
         if(data.force != undefined){
-            console.log(data.force)
+            let forceId = data.force;
+            let forcedData = await forceInsert(forceId, registerTransaction);
+            res.status(200).json(forcedData);
             return;
         }
 
 
-        //se revisa que la cédula no esté registrada
+        //se revisa que la cédula no esté registrada, de estarlo envía un conficto
         let student = await getStudentByCi(data.studentCi);
         if (student != null) {
             let conflicData = await saveInscriptionConflict(data, student);

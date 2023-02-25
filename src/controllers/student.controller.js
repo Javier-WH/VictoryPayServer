@@ -119,8 +119,7 @@ async function getStudentByCi(ci, transaction) {
 
 //
 
-async function updateStudentByCi({ code, studentName, studentLastName, studentCi, studentNation, seccion, grade, gender, birthDate, age }, transaction) {
-
+async function updateStudentByCi({ code, studentName, studentLastName, studentCi, studentNation, seccion, grade, gender, birthDate, age }, parents_id, tutor_id, transaction) {
 
     let update = await Student.update({
         name: studentName,
@@ -131,6 +130,8 @@ async function updateStudentByCi({ code, studentName, studentLastName, studentCi
         gender: gender,
         code: code,
         age: age,
+        parents_id,
+        tutor_id,
         birthDate: birthDate
     }, {
         where: {
@@ -139,7 +140,7 @@ async function updateStudentByCi({ code, studentName, studentLastName, studentCi
         transaction
     });
 
-    return insert.dataValues.id;
+    return update;
 
 
 }

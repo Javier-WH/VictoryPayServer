@@ -37,5 +37,28 @@ async function getMedicalInfoByStudentId( student_id, transaction){
     return null
 }
 
+async function updateMedicalInfoByStudentId({diabetes, hipertension, dislexia, daltonismo, epilepsia, asma, alergia, TDAH, observations1_4 }, student_id, transaction){
 
-module.exports = {insertMedicalInfo, getMedicalInfoByStudentId};
+    let update = await Medical_info.update({
+        diabetes,
+        hipertension,
+        dislexia,
+        daltonismo,
+        epilepsia,
+        asma,
+        alergias: alergia,
+        TDAH,
+        observations: observations1_4
+        
+    },{
+        where:{
+            student_id
+        },
+        transaction
+    });
+
+    return update;
+}
+
+
+module.exports = {insertMedicalInfo, getMedicalInfoByStudentId, updateMedicalInfoByStudentId};
