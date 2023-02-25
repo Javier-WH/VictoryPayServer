@@ -44,19 +44,33 @@ async function getParentsByCi({ motherCi, fatherCi }, transaction) {
 
 async function deleteParentsById(id, transaction) {
 
-
     Parents.destroy({
         where: {
             id
         },
         transaction
     });
+}
 
+async function getParentById(id, transaction){
 
+    let ask = await Parents.findAll({
+        where:{
+            id
+        }
+    },{
+        transaction
+    })
+
+    if(ask.length > 0){
+        return ask[0].dataValues;
+    }
+
+    return null;
 
 }
 
-module.exports = { insertParents, getParentsByCi, deleteParentsById }
+module.exports = { insertParents, getParentsByCi, deleteParentsById, getParentById }
 
 
 

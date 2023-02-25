@@ -17,5 +17,21 @@ async function insertContactInfo({phone1, phone2, email, whatsaap1, whatsaap2}, 
 
 }
 
+async function getContactInfoByStudentId(student_id, transaction){
 
-module.exports ={ insertContactInfo};
+    let ask = await Contact_info.findAll({
+        where:{
+            student_id
+        },
+        transaction
+    });
+
+    if(ask.length > 0){
+        return ask[0].dataValues;
+    }
+    return null;
+
+}
+
+
+module.exports ={ insertContactInfo, getContactInfoByStudentId};

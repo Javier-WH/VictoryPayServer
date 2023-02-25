@@ -32,4 +32,21 @@ async function getTutorByCi({tutorCi}, transaction){
     return null;
 }
 
-module.exports = {insertTutor, getTutorByCi}
+async function getTutorById(id, transaction){
+
+    let ask = await Tutor.findAll({
+        where:{
+           id
+        },
+        transaction
+    });
+
+    if(ask.length > 0){
+        return ask[0].dataValues;
+    }
+
+    return null;
+}
+
+
+module.exports = {insertTutor, getTutorByCi, getTutorById}

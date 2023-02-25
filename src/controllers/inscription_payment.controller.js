@@ -15,4 +15,20 @@ async function insertInscriptionPayment({mount, payMethod, account, date}, stude
     return insert.dataValues.id;
 }
 
-module.exports ={insertInscriptionPayment};
+async function getInscriptionPaimentByStudentId(student_id, transaction){
+
+    let ask = await Inscription_payment.findAll({
+        where:{
+            student_id
+        },
+        transaction
+    });
+
+    if(ask.length > 0){
+        return ask[0].dataValues
+    }
+    return null;
+
+}
+
+module.exports ={insertInscriptionPayment, getInscriptionPaimentByStudentId};

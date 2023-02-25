@@ -34,7 +34,7 @@ async function getAddressByStudentId(student_id, transaction){
     });
 
     if(ask.length > 0){
-        return ask[0];
+        return ask[0].dataValues;
     }
 
     return null;

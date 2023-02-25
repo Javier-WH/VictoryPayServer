@@ -21,5 +21,21 @@ async function insertMedicalInfo({diabetes, hipertension, dislexia, daltonismo, 
     return insert.dataValues.id;
 }
 
+async function getMedicalInfoByStudentId( student_id, transaction){
 
-module.exports = {insertMedicalInfo};
+    let ask = await Medical_info.findAll({
+        where:{
+            student_id
+        },
+        transaction
+    });
+
+    if(ask.length >0){
+
+        return ask[0].dataValues
+    }
+    return null
+}
+
+
+module.exports = {insertMedicalInfo, getMedicalInfoByStudentId};
