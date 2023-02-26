@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config({path: path.join(__dirname, ".env")});
 const getIP = require("./networkInterfaces.js");
 
-
+app.use(require("./routes/confirm.routes"));
 app.use(require("./routes/login.routes"));
 app.use(require("./routes/students/insertStudent.routes"));
 
