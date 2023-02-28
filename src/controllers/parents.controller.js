@@ -19,6 +19,30 @@ async function insertParents({ motherName, motherCi, motherNationality, motherWo
 
 
 }
+//
+
+async function updateParents({ motherName, motherCi, motherNationality, motherWork, fatherName, fatherCi, fatherNationality, fatherWork }, id, transaction) {
+
+
+    let update = await Parents.update({
+        mother_name: motherName,
+        mother_ci: motherCi,
+        mother_nation: motherNationality,
+        mother_work: motherWork,
+        father_name: fatherName,
+        father_ci: fatherCi,
+        father_nation: fatherNationality,
+        father_work: fatherWork
+    }, {
+        where:{
+           id
+        },
+        transaction
+    });
+    return update;
+}
+
+//
 
 
 async function getParentsByCi({ motherCi, fatherCi }, transaction) {
@@ -37,8 +61,6 @@ async function getParentsByCi({ motherCi, fatherCi }, transaction) {
     }
 
     return null;
-
-
 
 }
 
@@ -70,7 +92,7 @@ async function getParentById(id, transaction){
 
 }
 
-module.exports = { insertParents, getParentsByCi, deleteParentsById, getParentById }
+module.exports = { insertParents, getParentsByCi, deleteParentsById, getParentById, updateParents }
 
 
 

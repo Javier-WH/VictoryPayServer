@@ -80,6 +80,51 @@ async function getStudentByCode(code, transaction) {
 
 }
 //
+async function getStudentIdByCi(ci, transaction) {
+
+
+    let ask = await Student.findAll({
+        where: {
+            ci
+        }
+    }, {
+        transaction
+    });
+
+    if (ask.length > 0) {
+        return ask[0].dataValues.id;
+    }
+
+    return null;
+
+
+}
+//
+async function getStudentParentsIdAndTutorIdByCi(ci, transaction) {
+
+
+    let ask = await Student.findAll({
+        where: {
+            ci
+        }
+    }, {
+        transaction
+    });
+
+    if (ask.length > 0) {
+        return {
+            parents_id : ask[0].dataValues.parent_id,
+            tutor_id: ask[0].dataValues.tutor_id
+        }
+    }
+
+    return null;
+
+
+}
+
+
+//
 
 async function getStudentByCi(ci, transaction) {
 
@@ -171,4 +216,5 @@ async function updateStudentByCode({ code, studentName, studentLastName, student
 //
 
 
-module.exports = { insertStudent, getStudentByCode, getStudentByCi, updateStudentByCi, updateStudentByCode, updateStudentById };
+
+module.exports = { insertStudent, getStudentByCode, getStudentByCi, updateStudentByCi, updateStudentByCode, updateStudentById, getStudentIdByCi, getStudentParentsIdAndTutorIdByCi };

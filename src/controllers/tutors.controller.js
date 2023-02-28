@@ -16,6 +16,22 @@ async function insertTutor({tutorName, tutorCi, tutorNationality, link3}, transa
 
 }
 
+async function updateTutor({tutorName, tutorCi, tutorNationality, link3}, id, transaction){
+
+    let update = await Tutor.update({
+        tutor_name: tutorName,
+        tutor_ci: tutorCi,
+        tutor_nation: tutorNationality,
+        tutor_link: link3
+    },{
+        where:{id},
+        transaction
+    });
+
+    return update;
+
+}
+
 async function getTutorByCi({tutorCi}, transaction){
 
     let ask = await Tutor.findAll({
@@ -49,4 +65,4 @@ async function getTutorById(id, transaction){
 }
 
 
-module.exports = {insertTutor, getTutorByCi, getTutorById}
+module.exports = {insertTutor, getTutorByCi, getTutorById, updateTutor}
