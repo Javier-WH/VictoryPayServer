@@ -11,8 +11,38 @@ const { saveInscriptionConflict } = require("../controllers/conflict.controller"
 const { getJsonResponse } = require("../helpers/translateConflict");
 const forceInsert = require("./forceRegisterStudent.joinner");
 
+const createInsertionQuery = require("../SQL/queryMaker/InsertionQuery.queryMaker");
+const {addNewRegister, getRegisterByid} = require("../controllers/register.controller");
+
 async function registerStudent(req, res) {
     let data = req.body;
+
+      //crea las queries para seer almacenados
+    let queries = createInsertionQuery(data);
+
+    //revisa que la cedula no esté inscrita
+    let student = await getStudentByCi(data.studentCi);
+    
+    if (student != null) {
+      //////continuar desde aqui
+      
+    }
+
+
+    
+    //inserta los queriues en la tabla
+    let insertionID = await addNewRegister(queries);
+
+    //obtiene el registro de la tabla **** este paso se puede mejorar pasando el query generado directamente "queries.insertQuery"
+    let register = await getRegisterByid(insertionID);
+
+    //sequelize.query(register.insertQuery);
+    sequelize.query(register.rollbackQuery);
+
+
+    res.send("ok");
+
+    return;
     let registerTransaction = await sequelize.transaction();
 
     try {

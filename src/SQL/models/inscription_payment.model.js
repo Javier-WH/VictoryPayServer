@@ -10,6 +10,7 @@ Inscription_payment.init({
     cash: DataTypes.STRING,
     operation_number: DataTypes.STRING,
     date: DataTypes.STRING,
+    status: DataTypes.STRING,
    
     updatedAt:{
         type: 'TEXT',

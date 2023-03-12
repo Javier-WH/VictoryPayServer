@@ -4,13 +4,15 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config({path: path.join(__dirname, ".env")});
 const getIP = require("./networkInterfaces.js");
+const starProcedurres = require("./SQL/procedures/startProcedures");
+
 
 app.use(require("./routes/confirm.routes"));
 app.use(require("./routes/login.routes"));
 app.use(require("./routes/students/insertStudent.routes"));
 
 
-app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, error=>{
+app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, async error=>{
     console.clear();
 
     if(error){
@@ -19,15 +21,7 @@ app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, error=>{
     }
     console.log(`El servidor a iniciado en la dirección ${getIP()}:${process.env.SERVER_PORT}`);
 
-    ////******** */
-  
-    console.log("*****Rutas*****")
-
-    console.log("/addStudent  (POST) -> agrega un Estudiante")
-    console.log("/addUser  (POST) -> agrega un usuario")
-    console.log("/login  (POST) -> agrega valida un login")
-    console.log("***************")
-
+    await starProcedurres();
 
 });
 

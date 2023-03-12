@@ -136,7 +136,8 @@ function nomlaiceInfo(Student) {
             mount: Student.mount,
             payMethod: Student.payMethod,
             date: Student.date,
-            account: Student.account
+            account: Student.account,
+            status: Student.status,
         }
         return data;
     }
@@ -190,7 +191,9 @@ function nomlaiceInfo(Student) {
         mount: Student.inscription,
         payMethod: Student.cash == "true" ? "2" : "1",
         date: Student.date,
-        account: Student.operation_number
+        account: Student.operation_number,
+        status: Student.status,
+        
     }
 
     return data;

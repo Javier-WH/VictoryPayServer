@@ -8,6 +8,9 @@ const sequelize = new Sequelize({
     port: process.env.BD_PORT,
     dialect: "mysql",
     logging: false,
+    dialectOptions: {
+        multipleStatements: true
+    }
   });
 
 
