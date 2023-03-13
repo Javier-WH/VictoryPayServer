@@ -1,12 +1,23 @@
 const sequelize = require("../SQL/Sequelize/connection");
 const {addNewRegister, getRegisterByid} = require("../controllers/register.controller");
 const getCode = require("../helpers/getCode");
+const { getStudentByCi} = require("../controllers/student.controller");
+const normlaiceInfo = require("../helpers/normaliceInfo");
 
 async function resolveInsertion(req, res){
   
     let {registerID, option} = req.body;
 
     let register = await getRegisterByid(registerID);
+
+    if(register < 0){
+
+       res.status(200).json({
+            ERROR: "El registro no existe"
+       });
+        return;
+    }
+
     let code = getCode(20);
 
     let insertionObject = {
@@ -23,9 +34,12 @@ async function resolveInsertion(req, res){
     await sequelize.query(query);
     await addNewRegister(insertionObject);
 
-    res.status(200).json({
-        code
-    });   
+    let studenData =  await getStudentByCi(register.pivot);
+    
+    let data = normlaiceInfo(studenData);
+
+
+    res.status(200).json(data);   
 
 }
 

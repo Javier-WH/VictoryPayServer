@@ -19,14 +19,14 @@ const QUERY = "CREATE PROCEDURE `insertStudent`( " +
 ") " +
 "BEGIN " +
 	
-        " CALL getStudentID(code_, @SID);  " +
+        " CALL getStudentID(ci, @SID);  " +
 	
     "IF @SID < 0 THEN  " +
 		"INSERT INTO `students` ( `name`, `lastName`, `ci`, `nation`, `seccion`, `grade`, `gender`, `code`, `birthDate`, `age`, `parent_id`, `tutor_id`, `updatedAt`)  " +
 					    "VALUES (name_, lastName, ci, nation, seccion, grade, gender, code_, birthDate, age, parentID, tutorID, updatedAt);  " +
 		"SET studentID = LAST_INSERT_ID();  " +
 	"ELSE  " + 
-		"UPDATE `students` SET `name` = name_, `lastName` = lastName, `ci` = ci, `nation` = nation, `seccion` = seccion, `grade` = grade, `gender` = gender, `code` = code_,  " +
+		"UPDATE `students` SET `name` = name_, `lastName` = lastName, `nation` = nation, `seccion` = seccion, `grade` = grade, `gender` = gender, `code` = code_,  " +
 							"`birthDate` = birthDate, `age` = age, `parent_id` = parentID, `tutor_id` = tutorID, `updatedAt` = updatedAt WHERE `id` = @SID;  " +
 		"SET studentID = @SID;  " +
 	"END IF;  " +

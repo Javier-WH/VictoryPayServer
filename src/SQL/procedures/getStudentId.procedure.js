@@ -1,10 +1,10 @@
 const sequelize = require("../Sequelize/connection");
 
 
-const QUERY = "CREATE PROCEDURE `getStudentID`(IN _code TEXT, OUT studentID LONG) " + 
+const QUERY = "CREATE PROCEDURE `getStudentID`(IN _ci TEXT, OUT studentID LONG) " + 
             "BEGIN " + 
                 "SET @id = -1; " + 
-                "SELECT @id := id FROM students WHERE `code`= _code; " +
+                "SELECT @id := id FROM students WHERE `ci`= _ci; " +
                 "SET studentID = @id; " + 
             "END;";
 

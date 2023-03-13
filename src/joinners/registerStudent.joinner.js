@@ -18,7 +18,7 @@ const getCode = require("../helpers/getCode");
 
 async function registerStudent(req, res) {
     let data = req.body;
-
+  
     //crea las queries para seer almacenados
     let queries = createInsertionQuery(data);
 
@@ -76,64 +76,7 @@ async function registerStudent(req, res) {
 
 
     res.status(200).json(data);
-
-    return;
-    let registerTransaction = await sequelize.transaction();
-
-    try {
-        //esto revisa que no se esté obligando a una acutalización
-        if(data.force != undefined){
-            let forceId = data.force;
-            let forcedData = await forceInsert(forceId, registerTransaction);
-            res.status(200).json(forcedData);
-            return;
-        }
-
-
-        //se revisa que la cédula no esté registrada, de estarlo envía un conficto
-        let student = await getStudentByCi(data.studentCi);
-        if (student != null) {
-            let conflicData = await saveInscriptionConflict(data, student);
-            let conflict = await getJsonResponse(conflicData);
-            conflict.CONFLICT = "1";
-            res.status(200).json(conflict);
-            return
-        }
-
-
-
-        //revisa que los padres no estén registrados para no registralos dos veces
-        let parents = await getParentsByCi(data, registerTransaction);
-        let parents_id = 0;
-        if (parents != null) {
-            parents_id = parents.id;
-        } else {
-            parents_id = await insertParents(data, registerTransaction);
-        }
-
-
-        //revisa que el tutor no esté registrado para no registrarlo dos veces
-        let tutor = await getTutorByCi(data, registerTransaction);
-        let tutor_id = 0;
-        if (tutor != null) {
-            tutor_id = tutor.id;
-        } else {
-            tutor_id = await insertTutor(data, registerTransaction);
-        }
-
-        let student_id = await insertStudent(data, parents_id, tutor_id, registerTransaction);
-        await insertAddress(data, student_id, registerTransaction);
-        await insertMedicalInfo(data, student_id, registerTransaction);
-        await insertContactInfo(data, student_id, registerTransaction);
-        await insertInscriptionPayment(data, student_id, registerTransaction);
-        await registerTransaction.commit();
-        res.status(200).json(data);
-    } catch (error) {
-        await registerTransaction.rollback();
-        console.log(error);
-        //res.status(400).json({ ERROR: "ocurrio un error" });
-    }
-
+    
 }
 
 module.exports = registerStudent;

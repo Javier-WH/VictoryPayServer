@@ -21,6 +21,9 @@ async function getRegisterByid(id){
             id
         }
     });
+    if(ask == null){
+        return -1;
+    }
 
     return ask.dataValues;
 
