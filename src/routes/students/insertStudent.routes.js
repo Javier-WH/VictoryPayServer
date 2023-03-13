@@ -1,11 +1,13 @@
 const express = require("express");
 const Router = express.Router();
 const registerStudent = require("../../joinners/registerStudent.joinner");
+const resolveInsertion = require("../../joinners/resolveInsertionConflict");
 
 
 
 Router.post("/addStudent", express.json(), registerStudent);
 
+Router.post("/resolveInsertion", express.json(), resolveInsertion);
 
 module.exports = Router;
 

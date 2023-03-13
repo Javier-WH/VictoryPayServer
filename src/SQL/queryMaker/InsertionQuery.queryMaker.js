@@ -40,6 +40,7 @@ function createInsertionQuery(data) {
         type
     };
 
+
 }
 
 function getCode(length) {

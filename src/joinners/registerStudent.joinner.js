@@ -13,23 +13,58 @@ const forceInsert = require("./forceRegisterStudent.joinner");
 
 const createInsertionQuery = require("../SQL/queryMaker/InsertionQuery.queryMaker");
 const {addNewRegister, getRegisterByid} = require("../controllers/register.controller");
+const normlaiceInfo = require("../helpers/normaliceInfo");
+const getCode = require("../helpers/getCode");
 
 async function registerStudent(req, res) {
     let data = req.body;
 
-      //crea las queries para seer almacenados
+    //crea las queries para seer almacenados
     let queries = createInsertionQuery(data);
 
     //revisa que la cedula no esté inscrita
     let student = await getStudentByCi(data.studentCi);
-    
+
+    //si el estudiante esta registrado entonces hace un registro de tipo 2, es decir de conflicto
     if (student != null) {
-      //////continuar desde aqui
-      
+        //normaliza los datos del estudiante registrado
+        let registeredData = normlaiceInfo(student);
+        //agrega los datos faltantes como el usuario y la fecha
+        registeredData.user = data.user;
+        registeredData.timeStamp = data.timeStamp;
+        
+        //crea la querie adicional para el estudiante ya registrado
+        let queriesB = createInsertionQuery(registeredData);
+        
+        //genera el código del registro de conflicto
+        let code = getCode(20);
+
+        //crea los argumentos del registro 
+        let insertionObject = {
+            insertQuery: queries.insertQuery,
+            rollbackQuery: queriesB.insertQuery,
+            user: data.user, 
+            code,
+            pivot: data.studentCi,
+            type: 2
+        }
+
+        //inserta el registro de conflicto
+        let insertionID = await addNewRegister(insertionObject);
+        
+        //envia la solicitud de resolución de conflicto
+        res.status(200).json({
+            ERROR: "2",
+            title: "Conflicto de cédulas",
+            message: "La cédula suministrada ya está registrada",
+            registerID: insertionID,
+            code,
+            optionA: data,
+            optionB: registeredData
+        });
+        return
     }
 
-
-    
     //inserta los queriues en la tabla
     let insertionID = await addNewRegister(queries);
 
@@ -37,10 +72,10 @@ async function registerStudent(req, res) {
     let register = await getRegisterByid(insertionID);
 
     //sequelize.query(register.insertQuery);
-    sequelize.query(register.rollbackQuery);
+    sequelize.query(register.insertQuery);
 
 
-    res.send("ok");
+    res.status(200).json(data);
 
     return;
     let registerTransaction = await sequelize.transaction();
