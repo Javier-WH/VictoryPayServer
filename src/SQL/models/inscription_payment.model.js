@@ -9,6 +9,7 @@ Inscription_payment.init({
     inscription: DataTypes.STRING,
     cash: DataTypes.STRING,
     operation_number: DataTypes.STRING,
+    monthlyPrice: DataTypes.STRING,
     date: DataTypes.STRING,
     status: DataTypes.STRING,
    

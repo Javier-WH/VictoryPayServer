@@ -8,6 +8,8 @@ const startInsertStudent = require("./insertStudent.procedure");
 const startInsertTutor = require("./insertTutor.procedure");
 const startInsertParents = require("./insertParents.procedure");
 const startInscriptionPayment = require("./insertInscriptionPayment.procedure");
+const startInsertAbono = require("./insertAbono.procedure");
+
 
 async function starProcedurres(){
     try {
@@ -21,6 +23,7 @@ async function starProcedurres(){
         await startInsertTutor();
         await startInsertParents();
         await startInscriptionPayment();
+        await startInsertAbono();
         console.log("Procesos iniciados correctamente")
     } catch (error) {
         console.log(error)

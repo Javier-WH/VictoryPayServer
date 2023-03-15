@@ -1,4 +1,5 @@
 const Inscription_payment = require("../SQL/models/inscription_payment.model");
+const Abono = require("../SQL/models/abono.model");
 
 async function insertInscriptionPayment({mount, payMethod, account, date}, student_id, transaction){
 

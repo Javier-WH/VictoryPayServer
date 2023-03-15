@@ -5,6 +5,7 @@ const {getAddressByStudentId} = require("./address.controller");
 const {getContactInfoByStudentId} = require("./contact_info.controller");
 const {getMedicalInfoByStudentId} = require("./medicalInfo.controller");
 const {getInscriptionPaimentByStudentId} = require("./inscription_payment.controller");
+const {getAbono} = require("./abono.controller");
 
 
 async function insertStudent({ code, studentName, studentLastName, studentCi, studentNation, seccion, grade, gender, birthDate, age }, parent_id, tutor_id, transaction) {
@@ -145,6 +146,7 @@ async function getStudentByCi(ci, transaction) {
         let contact = await getContactInfoByStudentId(student.id, transaction);
         let medical = await getMedicalInfoByStudentId(student.id, transaction);
         let payment = await getInscriptionPaimentByStudentId(student.id, transaction);
+        let abono = await getAbono(student.tutor_id);
         
         return {
             ...student, 
@@ -153,7 +155,8 @@ async function getStudentByCi(ci, transaction) {
             ...address,
             ...contact,
             ...medical,
-            ...payment
+            ...payment,
+            ...abono
         };
     }
 

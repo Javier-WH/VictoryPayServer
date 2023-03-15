@@ -1,4 +1,4 @@
-const { updateStudentByCi, getStudentByCi, getStudentByCode, getStudentIdByCi, getStudentParentsIdAndTutorIdByCi } = require("../controllers/student.controller");
+const { updateStudentByCi, getStudentIdByCi} = require("../controllers/student.controller");
 const { getConflictItem } = require("../controllers/conflict.controller");
 const { updateAddressByStudentId } = require("../controllers/address.controller");
 const { getParentsByCi, insertParents, updateParents } = require("../controllers/parents.controller");

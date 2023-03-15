@@ -1,6 +1,9 @@
 
 function createInsertionQuery(data) {
 
+    let payment = data.payment_status ? data.monthlyPrice : 0;
+    
+
     let insertQuery = "START TRANSACTION; " +
     `CALL insertTutor("${data.tutorName}", "${data.tutorCi}", "${data.tutorNationality}", "${data.link3}", "${data.timeStamp}", @tutorID); ` +
     `CALL insertParents("${data.motherName}", "${data.motherCi}", "${data.motherNationality}", "${data.motherWork}", "${data.fatherName}", "${data.fatherCi}", "${data.fatherNationality}", "${data.fatherWork}", "${data.timeStamp}", @parentID);  ` +
@@ -8,8 +11,8 @@ function createInsertionQuery(data) {
 	`CALL insertContactInfo( @studentID, "${data.phone1}", "${data.phone2}", "${data.email}", "${data.whatsaap1}", "${data.whatsaap2}", "${data.timeStamp}"); ` +
     `CALL insertAddress(@studentID, "${data.birthCountry}", "${data.birthEstado}", "${data.birthMunicipio}", "${data.birthParroquia}", "${data.liveEstate}", "${data.liveMunicipio}", "${data.liveParroquia}", "${data.address}", "${data.procedence}", "${data.timeStamp}" ); ` +
     `CALL insertMedicalInfo(@studentID, "${data.diabetes}", "${data.hipertension}", "${data.dislexia}", "${data.daltonismo}", "${data.epilepsia}", "${data.asma}", "${data.alergia}", "${data.TDAH}", "${data.observations1_4}", "${data.timeStamp}" ); ` +
-    `CALL insertPayment(@studentID, "${data.mount}", "${data.payMethod}", "${data.account}", "${data.date}", "${data.status}", "${data.timeStamp}"); ` +
-    "SELECT @studentID; " +
+    `CALL insertPayment(@studentID, "${payment}", "${data.payMethod}", "${data.account}", "${data.date}", "${data.payment_status}", "${data.monthlyPrice}", "${data.timeStamp}"); ` +
+    `CALL insertAbono(@tutorID, "${data.abono}", "${data.timeStamp}"); ` + 
     "COMMIT;"
 
     let rollbackQuery = "START TRANSACTION; " + 

@@ -52,7 +52,9 @@ function nomlaiceInfo(Student) {
             payMethod: Student.payMethod,
             date: Student.date,
             account: Student.account,
-            status: Student.status,
+            payment_status: Student.status,
+            abono : Student.abono,
+            monthlyPrice : Student.monthlyPrice
         }
         return data;
     }
@@ -107,7 +109,9 @@ function nomlaiceInfo(Student) {
         payMethod: Student.cash == "true" ? "2" : "1",
         date: Student.date,
         account: Student.operation_number,
-        status: Student.status,
+        payment_status: Student.status,
+        abono : Student.abono,
+        monthlyPrice : Student.monthlyPrice
         
     }
 
