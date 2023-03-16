@@ -10,6 +10,7 @@ const starProcedurres = require("./SQL/procedures/startProcedures");
 app.use(require("./routes/confirm.routes"));
 app.use(require("./routes/login.routes"));
 app.use(require("./routes/students/insertStudent.routes"));
+app.use(require("./routes/students/syncStudent.routes"));
 
 
 app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, async error=>{

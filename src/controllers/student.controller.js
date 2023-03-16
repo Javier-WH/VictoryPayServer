@@ -1,11 +1,11 @@
 const Student = require("../SQL/models/students.model");
-const {getParentById} = require("./parents.controller");
-const {getTutorById} = require("./tutors.controller");
-const {getAddressByStudentId} = require("./address.controller");
-const {getContactInfoByStudentId} = require("./contact_info.controller");
-const {getMedicalInfoByStudentId} = require("./medicalInfo.controller");
-const {getInscriptionPaimentByStudentId} = require("./inscription_payment.controller");
-const {getAbono} = require("./abono.controller");
+const { getParentById } = require("./parents.controller");
+const { getTutorById } = require("./tutors.controller");
+const { getAddressByStudentId } = require("./address.controller");
+const { getContactInfoByStudentId } = require("./contact_info.controller");
+const { getMedicalInfoByStudentId } = require("./medicalInfo.controller");
+const { getInscriptionPaimentByStudentId } = require("./inscription_payment.controller");
+const { getAbono } = require("./abono.controller");
 
 
 async function insertStudent({ code, studentName, studentLastName, studentCi, studentNation, seccion, grade, gender, birthDate, age }, parent_id, tutor_id, transaction) {
@@ -32,7 +32,7 @@ async function insertStudent({ code, studentName, studentLastName, studentCi, st
 }
 //
 async function updateStudentById({ code, studentName, studentLastName, studentCi, studentNation, seccion, grade, gender, birthDate, age }, id, parent_id, tutor_id, transaction) {
-   
+
     let update = await Student.update({
         name: studentName,
         lastName: studentLastName,
@@ -47,7 +47,7 @@ async function updateStudentById({ code, studentName, studentLastName, studentCi
         parent_id,
         tutor_id
     }, {
-        where:{
+        where: {
             id
         },
         transaction
@@ -114,7 +114,7 @@ async function getStudentParentsIdAndTutorIdByCi(ci, transaction) {
 
     if (ask.length > 0) {
         return {
-            parents_id : ask[0].dataValues.parent_id,
+            parents_id: ask[0].dataValues.parent_id,
             tutor_id: ask[0].dataValues.tutor_id
         }
     }
@@ -141,17 +141,17 @@ async function getStudentByCi(ci, transaction) {
     if (ask.length > 0) {
         let student = ask[0].dataValues;
         let parents = await getParentById(student.parent_id, transaction);
-        let tutor = await getTutorById(student.tutor_id, transaction); 
+        let tutor = await getTutorById(student.tutor_id, transaction);
         let address = await getAddressByStudentId(student.id, transaction);
         let contact = await getContactInfoByStudentId(student.id, transaction);
         let medical = await getMedicalInfoByStudentId(student.id, transaction);
         let payment = await getInscriptionPaimentByStudentId(student.id, transaction);
         let abono = await getAbono(student.tutor_id);
-        
+
         return {
-            ...student, 
-            ...parents, 
-            ...tutor, 
+            ...student,
+            ...parents,
+            ...tutor,
             ...address,
             ...contact,
             ...medical,
@@ -218,6 +218,28 @@ async function updateStudentByCode({ code, studentName, studentLastName, student
 }
 //
 
+async function getStudentList() {
+
+    let list = await Student.findAll({
+        raw: true
+    });
+
+    if (list.length > 0) {
+        return list;
+    }
+    return null;
+}
 
 
-module.exports = { insertStudent, getStudentByCode, getStudentByCi, updateStudentByCi, updateStudentByCode, updateStudentById, getStudentIdByCi, getStudentParentsIdAndTutorIdByCi };
+
+module.exports = {
+    insertStudent,
+    getStudentByCode,
+    getStudentByCi,
+    updateStudentByCi,
+    updateStudentByCode,
+    updateStudentById,
+    getStudentIdByCi,
+    getStudentParentsIdAndTutorIdByCi,
+    getStudentList
+};
