@@ -9,6 +9,7 @@ async function SyncStudents(req, res) {
     //los alumnos enviados
     let commingData = req.body.datos;
     let user = req.body.user;
+    let date = req.body.date;
 
     //si no envia los datos
     if (commingData == undefined) {
@@ -24,7 +25,7 @@ async function SyncStudents(req, res) {
 
     await sequelize.query(queries.insertQuery);
 
-    let studentList = await getStudentList();
+    let studentList = await getStudentList(date);
   
     res.status(200).json({data : studentList});
 
