@@ -6,7 +6,8 @@ const { getContactInfoByStudentId } = require("./contact_info.controller");
 const { getMedicalInfoByStudentId } = require("./medicalInfo.controller");
 const { getInscriptionPaimentByStudentId } = require("./inscription_payment.controller");
 const { getAbono } = require("./abono.controller");
-
+const { Op } = require('@sequelize/core');
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function insertStudent({ code, studentName, studentLastName, studentCi, studentNation, seccion, grade, gender, birthDate, age }, parent_id, tutor_id, transaction) {
 
@@ -218,17 +219,79 @@ async function updateStudentByCode({ code, studentName, studentLastName, student
 }
 //
 
-async function getStudentList() {
+async function getStudentList(requestDate = "1//1/1998 ") {
 
-    let list = await Student.findAll({
-        raw: true
-    });
+    let list = await sequelize.query("SELECT students.*, tutors.tutor_name, tutors.tutor_ci, tutors.tutor_nation, tutor_link, tutors.updatedAT as tutorDate, " +
+    "parents.mother_name, parents.mother_ci, parents.mother_nation, parents.mother_work, parents.father_name, parents.father_ci, parents.father_nation, parents.father_work, parents.updatedAT as parentsDate, " +
+    "addresses.birth_country, addresses.birth_state, addresses.birth_municipio, addresses.birth_parroquia, addresses.live_state, addresses.live_municipio, addresses.live_parroquia, addresses.address, addresses.procedence_school, addresses.updatedAT as addressDate, " +
+    "contact_infos.phone1, contact_infos.phone2, contact_infos.email, contact_infos.whatsaap1, contact_infos.whatsaap2, contact_infos.updatedAT as contactDate, " +
+    "medical_infos.diabetes, medical_infos.hipertension, medical_infos.dislexia, medical_infos.daltonismo, medical_infos.epilepsia, medical_infos.asma, medical_infos.alergias, medical_infos.TDAH, medical_infos.observations, medical_infos.updatedAT as medicalDate, " +
+    "inscription_payments.inscription, inscription_payments.cash, inscription_payments.operation_number, inscription_payments.date, inscription_payments.status, inscription_payments.updatedAT as paymentDate " +
+    "FROM students " +
+    "JOIN tutors ON tutors.id = students.tutor_id " +
+    "JOIN parents ON parents.id = students.parent_id " +
+    "JOIN addresses ON students.id = addresses.student_id " +
+    "JOIN contact_infos ON students.id = contact_infos.student_id " +
+    "JOIN medical_infos ON students.id = medical_infos.student_id  " +
+    "JOIN inscription_payments ON students.id = inscription_payments.student_id");
 
     if (list.length > 0) {
         return list;
     }
     return null;
 }
+
+//////////
+
+async function searchConflicts(data) {
+
+    const records = data.map(student => {
+        condition = {};
+        condition.ci = student.ci;
+        condition.updatedAT = student.updatedAT;
+        return condition;
+    })
+
+    const conditions = records.map(record => ({
+        ci: record.ci,
+        updatedAT: {
+            [Op.lt]: record.updatedAT
+        }
+    }));
+
+
+    const conflicts = await Student.findAll({
+        where: {
+            [Op.or]: conditions
+        },
+        raw: true
+    });
+
+    let studentConflicts = [];
+    for (student of conflicts) {
+        let parents = await getParentById(student.parent_id);
+        let tutor = await getTutorById(student.tutor_id);
+        let address = await getAddressByStudentId(student.id);
+        let contact = await getContactInfoByStudentId(student.id);
+        let medical = await getMedicalInfoByStudentId(student.id);
+        let payment = await getInscriptionPaimentByStudentId(student.id);
+        let abono = await getAbono(student.tutor_id);
+
+        let studentData = {
+            ...student,
+            ...tutor,
+            ...parents,
+            ...address,
+            ...contact,
+            ...medical,
+            ...payment,
+            ...abono
+        }
+        studentConflicts.push(studentData);
+    }
+    return studentConflicts;
+}
+
 
 
 
@@ -241,5 +304,6 @@ module.exports = {
     updateStudentById,
     getStudentIdByCi,
     getStudentParentsIdAndTutorIdByCi,
-    getStudentList
+    getStudentList,
+    searchConflicts
 };

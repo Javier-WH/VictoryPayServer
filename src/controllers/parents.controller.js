@@ -1,4 +1,5 @@
 const Parents = require("../SQL/models/parents.model");
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function insertParents({ motherName, motherCi, motherNationality, motherWork, fatherName, fatherCi, fatherNationality, fatherWork }, transaction) {
 
@@ -77,6 +78,7 @@ async function deleteParentsById(id, transaction) {
 async function getParentById(id, transaction){
 
     let ask = await Parents.findAll({
+        attributes: { include: [[sequelize.col('updatedAt'), 'parentsDate']] },
         where:{
             id
         }

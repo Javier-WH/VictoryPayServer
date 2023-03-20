@@ -1,4 +1,5 @@
 const Medical_info = require("../SQL/models/medical_info.model");
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function insertMedicalInfo({diabetes, hipertension, dislexia, daltonismo, epilepsia, asma, alergia, TDAH, observations1_4 }, student_id, transaction){
 
@@ -24,6 +25,7 @@ async function insertMedicalInfo({diabetes, hipertension, dislexia, daltonismo, 
 async function getMedicalInfoByStudentId( student_id, transaction){
 
     let ask = await Medical_info.findAll({
+        attributes: { include: [[sequelize.col('updatedAt'), 'medicalDate']] },
         where:{
             student_id
         },

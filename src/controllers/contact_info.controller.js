@@ -1,4 +1,5 @@
 const Contact_info = require("../SQL/models/contact_info.model");
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function insertContactInfo({phone1, phone2, email, whatsaap1, whatsaap2}, student_id, transaction){
 
@@ -20,6 +21,7 @@ async function insertContactInfo({phone1, phone2, email, whatsaap1, whatsaap2}, 
 async function getContactInfoByStudentId(student_id, transaction){
 
     let ask = await Contact_info.findAll({
+        attributes: { include: [[sequelize.col('updatedAt'), 'contactDate']] },
         where:{
             student_id
         },

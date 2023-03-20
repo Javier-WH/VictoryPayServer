@@ -1,4 +1,5 @@
 const Tutor = require("../SQL/models/tutors.model");
+const sequelize = require("../SQL/Sequelize/connection");
 
 
 async function insertTutor({tutorName, tutorCi, tutorNationality, link3}, transaction){
@@ -51,6 +52,7 @@ async function getTutorByCi({tutorCi}, transaction){
 async function getTutorById(id, transaction){
 
     let ask = await Tutor.findAll({
+        attributes: { include: [[sequelize.col('updatedAt'), 'tutorDate']] },
         where:{
            id
         },

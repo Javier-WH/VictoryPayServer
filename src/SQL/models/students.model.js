@@ -16,7 +16,7 @@ Students.init({
     grade : DataTypes.STRING,
     gender : DataTypes.STRING,
     code : DataTypes.STRING,
-    birthDate : DataTypes.STRING,
+    birthdate : DataTypes.STRING,
     age : DataTypes.STRING,
     parent_id : DataTypes.STRING,
     tutor_id : DataTypes.STRING,

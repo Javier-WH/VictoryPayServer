@@ -1,5 +1,6 @@
 const Inscription_payment = require("../SQL/models/inscription_payment.model");
 const Abono = require("../SQL/models/abono.model");
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function insertInscriptionPayment({mount, payMethod, account, date}, student_id, transaction){
 
@@ -19,6 +20,7 @@ async function insertInscriptionPayment({mount, payMethod, account, date}, stude
 async function getInscriptionPaimentByStudentId(student_id, transaction){
 
     let ask = await Inscription_payment.findAll({
+        attributes: { include: [[sequelize.col('updatedAt'), 'paymentDate']] },
         where:{
             student_id
         },

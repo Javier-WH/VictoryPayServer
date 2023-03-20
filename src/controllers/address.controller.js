@@ -1,5 +1,5 @@
 const Address = require("../SQL/models/address.model");
-
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function insertAddress({birthCountry, birthEstado, birthMunicipio, birthParroquia, liveEstate, liveMunicipio, liveParroquia, address, procedence }, student_id, transaction){
 
@@ -27,6 +27,7 @@ async function insertAddress({birthCountry, birthEstado, birthMunicipio, birthPa
 async function getAddressByStudentId(student_id, transaction){
 
     let ask = await Address.findAll({
+        attributes: { include: [[sequelize.col('updatedAt'), 'addressDate']] },
         where:{
             student_id
         },

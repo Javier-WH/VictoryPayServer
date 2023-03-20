@@ -1,9 +1,11 @@
 const Abono = require("../SQL/models/abono.model");
+const sequelize = require("../SQL/Sequelize/connection");
 
 async function getAbono(tutor_id) {
 
     try {
         let ask = await Abono.findAll({
+            attributes: { include: [[sequelize.col('updatedAt'), 'abonoDate']] },
             where: {
                 tutor_id
             }
