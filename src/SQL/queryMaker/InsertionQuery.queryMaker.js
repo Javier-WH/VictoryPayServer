@@ -3,6 +3,11 @@ function createInsertionQuery(data) {
 
     let payment = data.payment_status ? data.monthlyPrice : 0;
     
+    if(data.tutorDate != null && data.tutorDate != undefined){
+        console.log(data.tutorDate)
+
+    }
+
 
     let insertQuery = "START TRANSACTION; " +
     `CALL insertTutor("${data.tutorName}", "${data.tutorCi}", "${data.tutorNationality}", "${data.link3}", "${data.timeStamp}", @tutorID); ` +

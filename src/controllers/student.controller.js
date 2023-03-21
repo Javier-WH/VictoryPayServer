@@ -227,7 +227,8 @@ async function getStudentList(requestDate = "01/01/1998 01:01:01") {
         + " addresses.birth_country, addresses.birth_state, addresses.birth_municipio, addresses.birth_parroquia, addresses.live_state, addresses.live_municipio, addresses.live_parroquia, addresses.address, addresses.procedence_school, addresses.updatedAT as addressDate, "  
         + " contact_infos.phone1, contact_infos.phone2, contact_infos.email, contact_infos.whatsaap1, contact_infos.whatsaap2, contact_infos.updatedAT as contactDate, " 
         + " medical_infos.diabetes, medical_infos.hipertension, medical_infos.dislexia, medical_infos.daltonismo, medical_infos.epilepsia, medical_infos.asma, medical_infos.alergias, medical_infos.TDAH, medical_infos.observations, medical_infos.updatedAT as medicalDate, " 
-        + " inscription_payments.inscription, inscription_payments.cash, inscription_payments.operation_number, inscription_payments.date, inscription_payments.status, inscription_payments.updatedAT as paymentDate " 
+        + " inscription_payments.inscription, inscription_payments.cash, inscription_payments.operation_number, inscription_payments.monthlyPrice, inscription_payments.date, inscription_payments.status, inscription_payments.updatedAT as paymentDate, " 
+        + " abonos.abono "
         + " FROM students " 
         + " JOIN tutors ON tutors.id = students.tutor_id  " 
         + " JOIN parents ON parents.id = students.parent_id " 
@@ -235,6 +236,7 @@ async function getStudentList(requestDate = "01/01/1998 01:01:01") {
         + " JOIN contact_infos ON students.id = contact_infos.student_id " 
         + " JOIN medical_infos ON students.id = medical_infos.student_id " 
         + " JOIN inscription_payments ON students.id = inscription_payments.student_id " 
+        + " JOIN abonos ON students.tutor_id = abonos.tutor_id "
         + ` WHERE students.updatedAt > '${requestDate}' ` ,
         {
             type: sequelize.QueryTypes.SELECT,

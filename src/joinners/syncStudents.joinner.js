@@ -11,11 +11,14 @@ async function SyncStudents(req, res) {
     let user = req.body.user;
     let date = req.body.date;
 
+
+
     //si no envia los datos
     if (commingData == undefined) {
         res.status(400).json({ ERROR: "dastos desconocidos" });
         return;
     }
+
 
     await searchConflicts(commingData);
 
@@ -25,7 +28,9 @@ async function SyncStudents(req, res) {
 
     await sequelize.query(queries.insertQuery);
 
-    let studentList = await getStudentList(date);
+    let studentList = date == "0" ? await getStudentList() : await getStudentList(date);
+
+    
   
     res.status(200).json({data : studentList});
 
