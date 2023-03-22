@@ -30,7 +30,6 @@ async function SyncStudents(req, res) {
 
     let studentList = date == "0" ? await getStudentList() : await getStudentList(date);
 
-    
   
     res.status(200).json({data : studentList});
 

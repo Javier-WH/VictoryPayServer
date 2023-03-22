@@ -228,7 +228,7 @@ async function getStudentList(requestDate = "01/01/1998 01:01:01") {
         + " contact_infos.phone1, contact_infos.phone2, contact_infos.email, contact_infos.whatsaap1, contact_infos.whatsaap2, contact_infos.updatedAT as contactDate, " 
         + " medical_infos.diabetes, medical_infos.hipertension, medical_infos.dislexia, medical_infos.daltonismo, medical_infos.epilepsia, medical_infos.asma, medical_infos.alergias, medical_infos.TDAH, medical_infos.observations, medical_infos.updatedAT as medicalDate, " 
         + " inscription_payments.inscription, inscription_payments.cash, inscription_payments.operation_number, inscription_payments.monthlyPrice, inscription_payments.date, inscription_payments.status, inscription_payments.updatedAT as paymentDate, " 
-        + " abonos.abono "
+        + " abonos.abono, abonos.updatedAt as abonoDate "
         + " FROM students " 
         + " JOIN tutors ON tutors.id = students.tutor_id  " 
         + " JOIN parents ON parents.id = students.parent_id " 

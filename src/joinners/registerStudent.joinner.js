@@ -21,7 +21,7 @@ async function registerStudent(req, res) {
   
     //crea las queries para seer almacenados
     let queries = createInsertionQuery(data);
-    console.log(data.abono);
+    
     //revisa que la cedula no esté inscrita
     let student = await getStudentByCi(data.studentCi);
 
