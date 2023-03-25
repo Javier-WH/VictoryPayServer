@@ -5,18 +5,21 @@ const sequelize = require("../Sequelize/connection");
 class Contact_info extends Model{};
 
 Contact_info.init({
-    student_id: DataTypes.STRING,
+    student_code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     phone1: DataTypes.STRING,
     phone2: DataTypes.STRING,
     email: DataTypes.STRING,
     whatsaap1: DataTypes.STRING,
     whatsaap2: DataTypes.STRING,
    
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

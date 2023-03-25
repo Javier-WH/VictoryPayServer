@@ -5,14 +5,17 @@ const sequelize = require("../Sequelize/connection");
 class Abono extends Model{};
 
 Abono.init({
-    tutor_id: DataTypes.STRING,
+    tutor_code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     abono: DataTypes.STRING,
    
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

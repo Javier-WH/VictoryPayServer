@@ -5,7 +5,11 @@ const sequelize = require("../Sequelize/connection");
 class Inscription_payment extends Model{};
 
 Inscription_payment.init({
-    student_id: DataTypes.STRING,
+    student_code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     inscription: DataTypes.STRING,
     cash: DataTypes.STRING,
     operation_number: DataTypes.STRING,
@@ -13,11 +17,10 @@ Inscription_payment.init({
     date: DataTypes.STRING,
     status: DataTypes.STRING,
     inscriptionPrice: DataTypes.STRING,
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

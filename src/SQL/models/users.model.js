@@ -13,11 +13,10 @@ Users.init({
         allowNull: false,
         unique: true
     },
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

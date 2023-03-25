@@ -5,12 +5,21 @@ const sequelize = require("../Sequelize/connection");
 class Register extends Model{}
 
 Register.init({
-    code: DataTypes.STRING,
+ 
+    register_code: DataTypes.STRING, /*{
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },*/
     user: DataTypes.STRING,
-    pivot: DataTypes.STRING,
+    description: DataTypes.STRING,
     type: DataTypes.STRING,
-    insertQuery: DataTypes.TEXT,
-    rollbackQuery: DataTypes.TEXT,
+    insertion_query: DataTypes.TEXT,
+    rollback_query: DataTypes.TEXT,
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal("DATE_FORMAT(NOW(), '%d/%m/%Y %H:%i:%s')")
+      }
 },{
     sequelize,
     modelName: "register",

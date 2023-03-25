@@ -5,7 +5,11 @@ const sequelize = require("../Sequelize/connection");
 class Address extends Model{};
 
 Address.init({
-    student_id: DataTypes.STRING,
+    student_code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     birth_country: DataTypes.STRING,
     birth_state: DataTypes.STRING,
     birth_municipio: DataTypes.STRING,
@@ -16,11 +20,10 @@ Address.init({
     address: DataTypes.STRING,
     procedence_school: DataTypes.STRING,
    
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

@@ -5,6 +5,11 @@ const sequelize = require("../Sequelize/connection");
 class Parents extends Model{};
 
 Parents.init({
+    parents_code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     mother_name: DataTypes.STRING,
     mother_ci:{
         type: DataTypes.STRING,
@@ -19,11 +24,10 @@ Parents.init({
     },
     father_nation: DataTypes.STRING,
     father_work: DataTypes.STRING,
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

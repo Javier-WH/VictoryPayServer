@@ -5,7 +5,11 @@ const sequelize = require("../Sequelize/connection");
 class Medical_info extends Model{};
 
 Medical_info.init({
-    student_id: DataTypes.STRING,
+    student_code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     diabetes: DataTypes.STRING,
     hipertension: DataTypes.STRING,
     dislexia: DataTypes.STRING,
@@ -16,11 +20,10 @@ Medical_info.init({
     TDAH: DataTypes.STRING,
     observations: DataTypes.STRING,
    
-    updatedAt:{
-        type: 'TEXT',
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false
-    }
+    updatedAT: {
+        type: DataTypes.TEXT,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
 
 },{
     sequelize,

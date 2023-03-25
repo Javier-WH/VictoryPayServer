@@ -1,47 +1,35 @@
 const Register = require("../SQL/models/registers.model");
-const sequelize = require("../SQL/Sequelize/connection");
 
 
-async function addNewRegister({ insertQuery, rollbackQuery, user, code, pivot, type}){
-    let insert = await Register.create({
-        code,
-        user,
-        pivot,
-        insertQuery,
-        rollbackQuery,
-        type
+async function createRegister({register_code, user, description, date, type, insertion_query, rollback_query}){
+   
+    let create = await Register.create({ 
+        register_code, 
+        user, 
+        description, 
+        date, 
+        type, 
+        insertion_query, 
+        rollback_query
+    },{
+        raw: true
     });
-    return insert.id;
-};
 
-async function getRegisterByid(id){
+    return create.id;
+}
+/////
 
-    let ask = await Register.findOne({
+async function getRegister(register_code){
+
+    let register = await Register.findOne({
         where:{
-            id
-        }
+            register_code
+        },
+        raw: true
     });
-    if(ask == null){
-        return -1;
-    }
 
-    return ask.dataValues;
-
+    return register;
 }
 
 
-async function getRegisterByCode(code){
-
-    let ask = await Register.findOne({
-        where:{
-            code
-        }
-    });
-
-    return ask.dataValues;
-
-}
-
-
-module.exports ={addNewRegister, getRegisterByid, getRegisterByCode}
-
+module.exports = {createRegister, getRegister};

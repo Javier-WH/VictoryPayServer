@@ -2,6 +2,7 @@ const sequelize = require("../Sequelize/connection");
 
 
 const QUERY = "CREATE PROCEDURE `insertTutor`( " +
+"IN _tutor_code TEXT, " +
 "IN tutorName TEXT, " +
 "IN tutorCi TEXT, " +
 "IN tutorNation TEXT, " +
@@ -14,10 +15,10 @@ const QUERY = "CREATE PROCEDURE `insertTutor`( " +
 	"CALL getTutorID(tutorCi, @TID); " +
 
 	"IF @TID < 0 THEN " +
-		"INSERT INTO `tutors`(`tutor_name`, `tutor_ci`, `tutor_nation`, `tutor_link`, `updatedAt`) VALUES (tutorName, tutorCi, tutorNation, tutorLink, updatedAT); " +
+		"INSERT INTO `tutors`(`tutor_code`, `tutor_name`, `tutor_ci`, `tutor_nation`, `tutor_link`, `updatedAt`) VALUES (_tutor_code, tutorName, tutorCi, tutorNation, tutorLink, updatedAT); " +
         "SET _ID = LAST_INSERT_ID(); " +
     "ELSE " +
-		"UPDATE `tutors` SET `tutor_name` = tutorName, `tutor_ci` = tutorCi, `tutor_nation` = tutorNation, `tutor_link` = tutorLink, `updatedAt` = updatedAT WHERE `id` = @TID; " +
+		"UPDATE `tutors` SET `tutor_code` = _tutor_code, `tutor_name` = tutorName, `tutor_ci` = tutorCi, `tutor_nation` = tutorNation, `tutor_link` = tutorLink, `updatedAt` = updatedAT WHERE `id` = @TID; " +
         "SET _ID = @TID; " +
     "END IF; " +
 

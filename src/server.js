@@ -4,6 +4,7 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config({path: path.join(__dirname, ".env")});
 const getIP = require("./networkInterfaces.js");
+const checkTables = require("./initTables");
 const starProcedurres = require("./SQL/procedures/startProcedures");
 
 
@@ -21,8 +22,8 @@ app.listen(process.env.SERVER_PORT, process.env.SERVER_IP, async error=>{
         return;
     }
     console.log(`El servidor a iniciado en la dirección ${getIP()}:${process.env.SERVER_PORT}`);
-
-    await starProcedurres();
+    checkTables();
+    //await starProcedurres();
 
 });
 
