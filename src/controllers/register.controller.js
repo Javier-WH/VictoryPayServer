@@ -1,7 +1,7 @@
 const Register = require("../SQL/models/registers.model");
 
 
-async function createRegister({register_code, user, description, date, type, insertion_query, rollback_query}){
+async function createRegister({register_code, user, description, date, type, insertion_query, rollback_query}, transaction){
    
     let create = await Register.create({ 
         register_code, 
@@ -12,6 +12,7 @@ async function createRegister({register_code, user, description, date, type, ins
         insertion_query, 
         rollback_query
     },{
+        transaction:transaction,
         raw: true
     });
 
@@ -19,17 +20,33 @@ async function createRegister({register_code, user, description, date, type, ins
 }
 /////
 
-async function getRegister(register_code){
+async function getRegister(register_code, transaction){
 
     let register = await Register.findOne({
         where:{
             register_code
         },
-        raw: true
+        raw: true,
+        transaction
     });
 
     return register;
 }
 
+//
+async function isRecordExisting(register_code){
+    const count = await Register.count({ 
+        where: { 
+            register_code 
+        } 
+    });
 
-module.exports = {createRegister, getRegister};
+
+    if( count > 0){
+        return true;
+    }
+
+    return false;
+}
+
+module.exports = {createRegister, getRegister, isRecordExisting};

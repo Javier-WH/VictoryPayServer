@@ -22,7 +22,7 @@ Students.init({
     },
     birthdate: DataTypes.STRING,
     age: DataTypes.STRING,
-    parent_code: DataTypes.STRING,
+    parents_code: DataTypes.STRING,
     tutor_code: DataTypes.STRING,
     updatedAT: {
         type: DataTypes.TEXT,

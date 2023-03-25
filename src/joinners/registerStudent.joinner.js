@@ -1,36 +1,47 @@
 const sequelize = require("../SQL/Sequelize/connection");
-const {createRegister, getRegister} = require("../controllers/register.controller");
+const { createRegister, isRecordExisting } = require("../controllers/register.controller");
+const Joi = require('joi');
+
 
 async function registerStudent(req, res) {
-    let data = req.body;
-    let {register_code, user, description, date, type, insertion_query, rollback_query} = data; 
-    
-    if(register_code == null || register_code == undefined ||
-        user == null || user == undefined ||
-        description == null || description == undefined ||
-        date == null || date == undefined ||
-        type == null || type == undefined || 
-        insertion_query == null || insertion_query == undefined ||
-        rollback_query == null || rollback_query == undefined){
-
-            res.status(400).json({ERROR :'Los datos de la solicitud son incorrectos o no están completos'});
-            return
-        } 
-
-
-    const insertTrasaction = await sequelize.transaction();
 
     try {
-        await createRegister(data);
-        let register = await getRegister(register_code);
-        sequelize.query(register.insertion_query);
-        insertTrasaction.commit();
-        res.status(200).json(data);
-    } catch (error) {
-        insertTrasaction.rollback();
-        res.status(500).json({ERROR : "No se ha podido registrar al estudiante"});
-    }
-
+        const schema = Joi.object({
+          register_code: Joi.string().required(),
+          user: Joi.string().required(),
+          description: Joi.string().required(),
+          date: Joi.date().required(),
+          type: Joi.string().required(),
+          insertion_query: Joi.string().required(),
+          rollback_query: Joi.string().required(),
+        });
+    
+        const { error, value: data } = schema.validate(req.body);
+        if (error) {
+          return res.status(400).json({ error: error.details[0].message });
+        }
+    
+        const transaction = await sequelize.transaction();
+    
+        try {
+          const isRecordExistingResult = await isRecordExisting(data.register_code);
+          if (isRecordExistingResult) {
+            await transaction.rollback();
+            return res.status(409).json({ error: 'El estudiante ya está registrado' });
+          }
+          await createRegister(data, transaction);
+          await sequelize.query(data.insertion_query, { transaction });
+          await transaction.commit();
+          return res.status(200).json(data);
+        } catch (error) {
+          await transaction.rollback();
+          console.error(error);
+          return res.status(500).json({ error: 'No se ha podido registrar al estudiante' });
+        }
+      } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Ha ocurrido un error inesperado' });
+      }
 }
 
 module.exports = registerStudent;
