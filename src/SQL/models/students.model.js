@@ -26,8 +26,8 @@ Students.init({
     tutor_code: DataTypes.STRING,
     updatedAT: {
         type: DataTypes.TEXT,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      }
+        defaultValue: Sequelize.literal("DATE_FORMAT(NOW(), '%m/%d/%Y %H:%i:%s')")
+    }
 
 
 }, {

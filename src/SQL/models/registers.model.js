@@ -19,7 +19,7 @@ Register.init({
     metadata: DataTypes.JSON,
     updatedAT: {
         type: DataTypes.TEXT,
-        defaultValue: Sequelize.literal("DATE_FORMAT(NOW(), '%d/%m/%Y %H:%i:%s')")
+        defaultValue: Sequelize.literal("DATE_FORMAT(NOW(), '%m/%d/%Y %H:%i:%s')")
       }
 },{
     sequelize,

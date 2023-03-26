@@ -1,4 +1,7 @@
 const Joi = require("joi");
+const {isRecordExisting, createRegister, getRecordList} = require("../controllers/register.controller");
+const sequelize = require("../SQL/Sequelize/connection");
+
 
 async function SyncStudents(req, res) {
 
@@ -30,6 +33,7 @@ async function SyncStudents(req, res) {
             description: Joi.string().required(),
             type: Joi.string().required(),
             user: Joi.string().required(),
+            updatedAT : Joi.string()
 
         }).messages({
             'any.required': 'La estructura de la lista de datos no es correcta'
@@ -42,15 +46,31 @@ async function SyncStudents(req, res) {
 
     }
 
-    
+    let updateTransaction = await sequelize.transaction();
+    for (register of list){
 
+      let isRegistered = await isRecordExisting(register.register_code);
 
+      if(!isRegistered){
 
+      
+        try {
+          await createRegister(register, updateTransaction);
+          await sequelize.query(register.insertion_query, {transaction:updateTransaction });
+          
+        } catch (error) {
+          await updateTransaction.rollback();
+          console.log(error);
+          return res.status(500).json({error: "No se pudo insertar el estudiante"});
+        }
 
+      }
+    }
 
-    res.send("hola");
+    await updateTransaction.commit();
+    let recordList = await getRecordList();
 
-    return;
+    return res.status(200).json(recordList)
 
 }
 
