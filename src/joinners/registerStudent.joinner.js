@@ -5,6 +5,7 @@ const Joi = require('joi');
 
 async function registerStudent(req, res) {
 
+
     try {
         const schema = Joi.object({
           register_code: Joi.string().required(),
@@ -14,10 +15,12 @@ async function registerStudent(req, res) {
           type: Joi.string().required(),
           insertion_query: Joi.string().required(),
           rollback_query: Joi.string().required(),
+          metadata: Joi.object().required()
         });
     
         const { error, value: data } = schema.validate(req.body);
         if (error) {
+          console.log(error.details[0].message)
           return res.status(400).json({ error: error.details[0].message });
         }
     

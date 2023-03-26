@@ -1,14 +1,15 @@
 const Register = require("../SQL/models/registers.model");
 
 
-async function createRegister({register_code, user, description, date, type, insertion_query, rollback_query}, transaction){
+async function createRegister({register_code, user, description, date, type, metadata, insertion_query, rollback_query}, transaction){
    
     let create = await Register.create({ 
         register_code, 
         user, 
         description, 
         date, 
-        type, 
+        type,
+        metadata, 
         insertion_query, 
         rollback_query
     },{
