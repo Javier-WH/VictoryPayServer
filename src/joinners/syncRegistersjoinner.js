@@ -3,7 +3,7 @@ const {isRecordExisting, createRegister, getRecordList} = require("../controller
 const sequelize = require("../SQL/Sequelize/connection");
 
 
-async function SyncStudents(req, res) {
+async function SyncRegister(req, res) {
 
     let list = req.body.data;
     let date = req.body.date;
@@ -76,5 +76,5 @@ async function SyncStudents(req, res) {
 
 }
 
-module.exports = SyncStudents;
+module.exports = SyncRegister;
 

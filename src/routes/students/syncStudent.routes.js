@@ -1,10 +1,10 @@
 const express = require("express");
 const Router = express.Router();
-const SyncStudents = require("../../joinners/syncStudents.joinner")
+const SyncRegister = require("../../joinners/syncRegistersjoinner")
 
 
 
-Router.post("/syncStudents", express.json(),SyncStudents);
+Router.post("/SyncRegister", express.json(),SyncRegister);
 
 
 
