@@ -16,7 +16,6 @@ Inscription_payment.init({
     monthlyPrice: DataTypes.STRING,
     date: DataTypes.STRING,
     status: DataTypes.STRING,
-    inscriptionPrice: DataTypes.STRING,
     updatedAT: {
         type: DataTypes.TEXT,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')

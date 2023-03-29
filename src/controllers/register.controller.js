@@ -52,20 +52,7 @@ async function isRecordExisting(register_code) {
     return false;
 }
 
-//
-/*
-async function getRecordList(updatedAT) {
 
-    let list = await Register.findAll({
-        where: {
-            updatedAT
-        },
-        raw:true
-    })
-
-    return list;
-}
-*/
 
 
 async function getRecordList(updatedAT = "01/01/1998 01:01:01") {
