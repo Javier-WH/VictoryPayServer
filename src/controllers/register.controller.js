@@ -53,14 +53,32 @@ async function isRecordExisting(register_code) {
 }
 
 
-
-
 async function getRecordList(updatedAT = "01/01/1998 01:01:01") {
     let query = `SELECT * FROM registers WHERE STR_TO_DATE(updatedAT,'%m/%d/%Y %H:%i:%s') >= STR_TO_DATE('${updatedAT}','%m/%d/%Y %H:%i:%s')`;
     let list = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
     return list;
 }
 
+async function getRecordPage (updatedAT = "01/01/1998 01:01:01", page = 1){
+    const pageSize = 50;
+    const totalRecords = await Register.count();
+    const totalPages = Math.ceil(totalRecords / pageSize); 
+    const actualPage = (page - 1) * 50
 
 
-module.exports = { createRegister, getRegister, isRecordExisting, getRecordList };
+    const query = `SELECT * FROM registers WHERE STR_TO_DATE(updatedAT,'%m/%d/%Y %H:%i:%s') >= STR_TO_DATE('${updatedAT}','%m/%d/%Y %H:%i:%s') LIMIT 50 OFFSET ${actualPage}`;
+    const pageData = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+  
+    return {
+        date: updatedAT,
+        pageSize,
+        totalRecords,
+        totalPages, 
+        page,
+        pageData
+    }
+
+}
+
+
+module.exports = { createRegister, getRegister, isRecordExisting, getRecordList, getRecordPage };
