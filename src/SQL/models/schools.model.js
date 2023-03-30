@@ -5,7 +5,10 @@ const sequelize = require("../Sequelize/connection");
 class Schools extends Model{};
 
 Schools.init({
-    school: DataTypes.STRING,
+    school: {
+        type: DataTypes.STRING,
+        unique: true
+    },
     updatedAT: {
         type: DataTypes.TEXT,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
