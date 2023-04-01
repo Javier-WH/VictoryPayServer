@@ -9,7 +9,7 @@ async function syncSchools(req, res) {
     const transaction = await sequelize.transaction();
     try {
         const schema = Joi.object({
-            list: Joi.array().min(1).required()
+            list: Joi.array().required()
         });
 
         const { error, value: data } = schema.validate({ list });

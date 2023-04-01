@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const {isRecordExisting, createRegister} = require("../controllers/register.controller");
 const sequelize = require("../SQL/Sequelize/connection");
+const createIinscriptionPaymentRegister = require("../helpers/createIinscriptionPaymentRegister")
 
 
 async function SyncRegister(req, res) {
@@ -51,13 +52,19 @@ async function SyncRegister(req, res) {
     for (register of list){
 
       let isRegistered = await isRecordExisting(register.register_code);
-
+      //si el registgro no está registrado
       if(!isRegistered){
       
         try {
+
+          if(register.type == 2){
+      
+           // register = await createIinscriptionPaymentRegister(register);
+        
+          }
+
           await createRegister(register, updateTransaction);
           await sequelize.query(register.insertion_query, {transaction:updateTransaction });
-          
         } catch (error) {
           await updateTransaction.rollback();
           console.log(error);
