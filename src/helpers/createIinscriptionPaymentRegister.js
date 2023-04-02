@@ -2,9 +2,17 @@ const { getAbono } = require("../controllers/abono.controller")
 
 async function createIinscriptionPaymentRegister(incomingRegister) {
 
+  let metadata = incomingRegister.metadata;
+  
+  if(typeof metadata == "string"){
+    metadata = JSON.parse(metadata);
+
+  }  
+
+
   try {
 
-    const { student_code, money: inscription, cash, operation_number, monthlyPrice, date, updatedAT, tutor_code } = incomingRegister.metadata;
+    const { student_code, money: inscription, cash, operation_number, monthlyPrice, date, updatedAT, tutor_code } = metadata;
 
     const storedAbono = await getAbono(tutor_code); // obtener la cantidad guardada de dinero
 

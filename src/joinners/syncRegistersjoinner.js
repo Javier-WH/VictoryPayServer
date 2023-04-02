@@ -58,8 +58,8 @@ async function SyncRegister(req, res) {
         try {
 
           if(register.type == 2){
-      
-           // register = await createIinscriptionPaymentRegister(register);
+        
+           register = await createIinscriptionPaymentRegister(register);
         
           }
 

@@ -17,4 +17,15 @@ async function getAbono(tutor_code){
     return tutorRegister.abono;
 }
 
-module.exports = {getAbono}
+///
+
+async function getAbonosList(){
+
+    let list = await Abono.findAll({raw:true});
+
+    return list;
+
+}
+
+
+module.exports = {getAbono, getAbonosList}
