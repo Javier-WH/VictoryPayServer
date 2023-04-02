@@ -52,10 +52,15 @@ async function SyncRegister(req, res) {
     for (register of list){
 
       let isRegistered = await isRecordExisting(register.register_code);
+
       //si el registgro no está registrado
       if(!isRegistered){
       
         try {
+          if(typeof register.metadata == "string"){
+            register.metadata = JSON.parse(register.metadata);
+        
+          }  
 
           if(register.type == 2){
         

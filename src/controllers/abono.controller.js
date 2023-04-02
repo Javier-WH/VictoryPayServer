@@ -1,5 +1,5 @@
 const Abono = require("../SQL/models/abono.model");
-
+const sequelize = require("../SQL/Sequelize/connection")
 
 async function getAbono(tutor_code){
 
@@ -19,13 +19,40 @@ async function getAbono(tutor_code){
 
 ///
 
-async function getAbonosList(){
+async function getAbonosListPage(updatedAT = "01/01/1998 01:01:01", page = 1){
+    const pageSize = 50;
+    const totalRecords = await Abono.count();
 
-    let list = await Abono.findAll({raw:true});
+    const totalPages = Math.ceil(totalRecords / pageSize); 
+    const actualPage = (page - 1) * 50;
 
-    return list;
+
+    const query = `SELECT * FROM abonos WHERE STR_TO_DATE(abonos.updatedAT,'%m/%d/%Y %H:%i:%s') >= STR_TO_DATE('${updatedAT}','%m/%d/%Y %H:%i:%s') ` +
+    `LIMIT 50 OFFSET ${actualPage};`;
+
+    const abonosList = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+
+   
+    
+    const pageData = abonosList.map(register =>{
+        
+        let insertion_query = `REPLACE INTO abonos (tutor_code, abono, updatedAT) VALUES ('${register.tutor_code}', '${register.abono}', '${register,updatedAT}')`
+            
+        
+        return {insertion_query};
+    })
+
+  
+    return  {
+        date: updatedAT,
+        pageSize,
+        totalRecords,
+        totalPages, 
+        page,
+        pageData
+    }
 
 }
 
 
-module.exports = {getAbono, getAbonosList}
+module.exports = {getAbono, getAbonosListPage}

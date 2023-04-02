@@ -12,7 +12,7 @@ async function createIinscriptionPaymentRegister(incomingRegister) {
 
   try {
 
-    const { student_code, money: inscription, cash, operation_number, monthlyPrice, date, updatedAT, tutor_code } = metadata;
+    const { student_code, inscription, cash, operation_number, monthlyPrice, date, updatedAT, tutor_code } = metadata;
 
     const storedAbono = await getAbono(tutor_code); // obtener la cantidad guardada de dinero
 
@@ -27,6 +27,9 @@ async function createIinscriptionPaymentRegister(incomingRegister) {
     const payment = sufficientMoney ? monthlyPrice : "0";
 
     const newAbono = sufficientMoney ? totalMoney : storedAbono + Number.parseFloat(inscription); // calcular el nuevo abono
+
+  
+
 
     let insertion_query = `REPLACE INTO inscription_payments (student_code, inscription, cash, operation_number, monthlyPrice, date, status, updatedAT) 
       VALUES ('${student_code}', '${payment}', '${cash}', '${operation_number}', '${monthlyPrice}', '${date}', '${sufficientMoney}', '${updatedAT}' ); 
