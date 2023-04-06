@@ -10,6 +10,7 @@ const Users = require("./SQL/models/users.model");
 const Tutors = require("./SQL/models/tutors.model");
 const Students = require("./SQL/models/students.model");
 const Register = require("./SQL/models/registers.model");
+const Monthly_payment = require("./SQL/models/monthly_payment.model");
 
 function checkTables(){
     console.log("Tablas inicializadas");

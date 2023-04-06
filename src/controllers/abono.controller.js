@@ -19,6 +19,22 @@ async function getAbono(tutor_code){
 
 ///
 
+async function abonoRegisterExist(tutor_code){
+
+    let tutorRegister = await Abono.findOne({
+        where:{
+            tutor_code
+        },
+        raw: true
+    });
+
+    return tutorRegister;
+
+}
+
+
+///
+
 async function getAbonosListPage(updatedAT = "01/01/1998 01:01:01", page = 1){
     const pageSize = 50;
     const totalRecords = await Abono.count();
@@ -55,4 +71,4 @@ async function getAbonosListPage(updatedAT = "01/01/1998 01:01:01", page = 1){
 }
 
 
-module.exports = {getAbono, getAbonosListPage}
+module.exports = {getAbono, getAbonosListPage, abonoRegisterExist}
