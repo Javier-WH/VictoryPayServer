@@ -1,7 +1,8 @@
 const Joi = require("joi");
 const {isRecordExisting, createRegister} = require("../controllers/register.controller");
 const sequelize = require("../SQL/Sequelize/connection");
-const createIinscriptionPaymentRegister = require("../helpers/createIinscriptionPaymentRegister")
+const createIinscriptionPaymentRegister = require("../helpers/createIinscriptionPaymentRegister");
+const {generateMonthlyPaymentRegister} = require ("../joinners/registerMonthlyPayment.joiner")
 
 
 async function SyncRegister(req, res) {
@@ -30,7 +31,7 @@ async function SyncRegister(req, res) {
         const schema = Joi.object({
             insertion_query: Joi.string().required(),
             rollback_query: Joi.string().required(),
-            metadata: Joi.string().required(),
+            metadata: Joi.alternatives().try(Joi.string(), Joi.array()).required(),
             register_code: Joi.string().required(),
             description: Joi.string().required(),
             type: Joi.string().required(),
@@ -62,10 +63,18 @@ async function SyncRegister(req, res) {
         
           }  
 
+          //type 1 -> isncricion de studiantes
+          //type 2 -> pago de inscripcion de estudiantes
+          //type 3 -> pago mensualidad
           if(register.type == 2){
-        
            register = await createIinscriptionPaymentRegister(register);
-        
+          }
+
+          if(register.type == 3){
+            register = await generateMonthlyPaymentRegister(register.metadata);
+            if(register.error){
+              throw register
+            }
           }
 
           await createRegister(register, updateTransaction);

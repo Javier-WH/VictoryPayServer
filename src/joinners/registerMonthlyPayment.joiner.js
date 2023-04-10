@@ -8,12 +8,58 @@ const { createRegister } = require("../controllers/register.controller");
 
 
 async function monthlyPayment(req, res) {
+    
+    const register_data = await generateMonthlyPaymentRegister(req.body);
+    
+    if(register_data.error){
+        res.status(500).json(register_data);
+        return
+    }
+
+    const transaction = await sequelize.transaction();
+
+    try {
+        await createRegister(register_data, transaction);
+        await sequelize.query(register_data.insertion_query, { transaction });
+
+    } catch (error) {
+        console.log(error)
+        await transaction.rollback();
+        res.status(500).json({error: "Ocurrió un error al intentar insrtar el registro"})
+        return
+    }
+
+
+
+    await transaction.commit();
+    return res.status(200).json(register_data);
+
+}
+
+module.exports = {monthlyPayment, generateMonthlyPaymentRegister};
+
+
+function getCurrentDate() {
+    const fecha = new Date();
+    const mes = fecha.getMonth() + 1;
+    const dia = fecha.getDate();
+    const anio = fecha.getFullYear();
+    const horas = fecha.getHours();
+    const minutos = fecha.getMinutes();
+    const segundos = fecha.getSeconds();
+    const fechaActual = `${mes}/${dia}/${anio} ${horas}:${minutos}:${segundos}`;
+    return fechaActual;
+}
+
+
+
+async function generateMonthlyPaymentRegister(data){
     let PAYMENT_DONE = 0;
     let MONTHS = 0;
     let MONTHLY_PRICE = 0;
     let pays = [];
 
-    const data = req.body;
+
     //revisa que se recibe un array de al menos un elemento
     const schema = Joi.object({
         data: Joi.array().min(1).required()
@@ -24,7 +70,7 @@ async function monthlyPayment(req, res) {
 
     if (error) {
         console.log(error.details[0].message)
-        return res.status(400).json({ error: error.details[0].message });
+        return { error: error.details[0].message };
     }
 
     //valida cada una de los indices del array
@@ -47,15 +93,13 @@ async function monthlyPayment(req, res) {
 
         if (error) {
             console.log(error.details[0].message)
-            res.status(500).json({ error: "los datos no son correctos" })
-            return
+            return{ error: "los datos no son correctos" }
         }
     }
 
     const recordExist = await isRecordExisting(data[0].register_code);
     if (recordExist) {
-        res.status(500).json({ error: "el registo ya existe" })
-        return
+        return{ error: "el registo ya existe" }
     }
 
 
@@ -123,7 +167,7 @@ async function monthlyPayment(req, res) {
         rollback_query = `Update abonos SET abono = abono - ${PAYMENT_DONE}, updatedAT = '${updatedAT}' WHERE tutor_code = '${tutor_code}';`
     }
 
-    let register_data = {
+    return {
         register_code: data[0].register_code,
         user: data[0].user,
         description: "Pago de mensualidad",
@@ -142,39 +186,36 @@ async function monthlyPayment(req, res) {
         updatedAT
     }
 
-  
-
-    const transaction = await sequelize.transaction();
-
-    try {
-        //await createRegister(register_data, transaction);
-        await sequelize.query(register_data.insertion_query, { transaction });
-
-    } catch (error) {
-        console.log(error)
-        await transaction.rollback();
-        res.status(500).json({error: "Ocurrió un error al intentar insrtar el registro"})
-        return
-    }
-
-
-
-    await transaction.commit();
-    return res.status(200).json(register_data);
-
 }
 
-module.exports = monthlyPayment;
 
+//debe recibir un array similar a este
 
-function getCurrentDate() {
-    const fecha = new Date();
-    const mes = fecha.getMonth() + 1;
-    const dia = fecha.getDate();
-    const anio = fecha.getFullYear();
-    const horas = fecha.getHours();
-    const minutos = fecha.getMinutes();
-    const segundos = fecha.getSeconds();
-    const fechaActual = `${mes}/${dia}/${anio} ${horas}:${minutos}:${segundos}`;
-    return fechaActual;
-}
+/*
+[
+  {
+    "register_code": "R-651561-1251651",
+    "student_code": "123132132Y",
+    "tutor_code": "15313153",
+    "payment": "50",
+    "monthly_price": "50",
+    "cash": "1",
+    "operation_number": "6541654165",
+    "operation_date": "31265165",
+    "months": "1",
+    "user": "16193765",
+    "updatedAT": "03/29/2023 09:03:25"
+  },
+  {
+    "register_code": "R-62322-9781651",
+    "student_code": "12313276876Y",
+    "tutor_code": "15313153",
+    "payment": "50",
+    "monthly_price": "50",
+    "cash": "1",
+    "operation_number": "6541654165",
+    "operation_date": "31265165",
+    "months": "1",
+    "user": "16193765",
+    "updatedAT": "03/29/2023 09:03:25"
+*/
