@@ -54,6 +54,12 @@ function getCurrentDate() {
 
 
 async function generateMonthlyPaymentRegister(data){
+//////////////////////////////revisar esto
+  /*  if(data.data != null || data.data != undefined){
+        data = data.data
+    }*/
+
+
     let PAYMENT_DONE = 0;
     let MONTHS = 0;
     let MONTHLY_PRICE = 0;

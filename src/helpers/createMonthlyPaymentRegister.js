@@ -11,7 +11,8 @@ async function createMonthlyPaymentRegister(register) {
 
 
   //obtiene el ultimo pago realizado
-  const last_PaymentDone = monthly_payment_info?.last_payment ?? getCurrentDate();
+  const last_PaymentDone = monthly_payment_info?.last_payment ?? getOctoberDate();
+
 
   //lista de meses que se deben
   const pending_payments = getDateArray(last_PaymentDone)
@@ -104,4 +105,21 @@ function formatDate(date) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}/${month}/${day}`;
+}
+
+
+function getOctoberDate() {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  
+  if (today.getMonth() >= 9) {
+    // Si ya pasó octubre de este año
+    const octoberFirst = new Date(currentYear, 9, 1); // 9 = octubre (los meses empiezan en 0)
+    return formatDate(octoberFirst)
+  } else {
+    // Si todavía no ha pasado octubre de este año
+    const lastYear = currentYear - 1;
+    const octoberFirst = new Date(lastYear, 9, 1); // 9 = octubre (los meses empiezan en 0)
+    return formatDate(octoberFirst)
+  }
 }
