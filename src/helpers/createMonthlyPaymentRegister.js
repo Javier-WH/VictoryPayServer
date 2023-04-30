@@ -54,8 +54,8 @@ async function createMonthlyPaymentRegister(register) {
   insertion_query = `INSERT INTO monthly_payments (student_code, last_payment, updatedAT) VALUES ('${student_code}', '${last_payment}', '${updatedAT}') ` +
     `ON DUPLICATE KEY UPDATE last_payment = '${last_payment}', updatedAT = '${updatedAT}'; `;
 
-
-  rollback_query = `UPDATE monthly_payments SET last_payment = '${last_PaymentDone}', updatedAT = '${updatedAT}' WHERE student_code = '${student_code}'; `
+/////////////////////xxxx //////////////////////////////////////////////////////////////////////////////////
+  rollback_query = `UPDATE monthly_payments SET last_payment = ADDDATE(last_payment, INTERVAL -${months} MONTH), updatedAT = '${updatedAT}' WHERE student_code = '${student_code}'; `
 
 
 

@@ -108,6 +108,7 @@ async function generateMonthlyPaymentRegister(data){
         return{ error: "el registo ya existe" }
     }
 
+    
 
     for (let register of data) {
         //la cantidad de meses a pagar
